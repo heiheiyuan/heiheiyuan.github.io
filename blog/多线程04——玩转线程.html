@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>玩转线程 | 蜗牛柠檬</title>
+    <meta name="description" content="">
+    <meta name="generator" content="VuePress 1.8.2">
+    <link rel="icon" href="/assets/lemon.png">
+    <meta name="description" content="慢悠悠的蜗牛也会酸你们疯狂内卷后的优秀~">
+    <link rel="preload" href="/assets/css/0.styles.3898a95a.css" as="style"><link rel="preload" href="/assets/js/app.5ad89f1f.js" as="script"><link rel="preload" href="/assets/js/2.32caeb4e.js" as="script"><link rel="preload" href="/assets/js/10.5f2f1c75.js" as="script"><link rel="prefetch" href="/assets/js/11.0507e810.js"><link rel="prefetch" href="/assets/js/12.01ba3a57.js"><link rel="prefetch" href="/assets/js/13.a7d2fde5.js"><link rel="prefetch" href="/assets/js/14.321acd8d.js"><link rel="prefetch" href="/assets/js/15.b4f44360.js"><link rel="prefetch" href="/assets/js/3.a92b6b9d.js"><link rel="prefetch" href="/assets/js/4.e19c5270.js"><link rel="prefetch" href="/assets/js/5.cee4e772.js"><link rel="prefetch" href="/assets/js/6.59e1954e.js"><link rel="prefetch" href="/assets/js/7.7d2fc43b.js"><link rel="prefetch" href="/assets/js/8.5a2b4f23.js"><link rel="prefetch" href="/assets/js/9.95bf3431.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.3898a95a.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="ant-row"><div class="nav-button"><i aria-label="icon: bars" class="anticon anticon-bars"><svg viewBox="0 0 1024 1024" focusable="false" data-icon="bars" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm0 284a56 56 0 1 0 112 0 56 56 0 1 0-112 0zm0 284a56 56 0 1 0 112 0 56 56 0 1 0-112 0z"></path></svg></i> <span></span></div> <div class="ant-col ant-col-xs-24 ant-col-sm-24 ant-col-md-6 ant-col-lg-5 ant-col-xl-5 ant-col-xxl-4"><a href="/" class="router-link-active no-logo home-link"><!----> <span class="site-name">蜗牛柠檬</span></a> <div class="search-box mobile-search"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div></div> <div class="ant-col ant-col-xs-0 ant-col-sm-0 ant-col-md-18 ant-col-lg-19 ant-col-xl-19 ant-col-xxl-20"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><ul role="menu" id="nav" class="ant-menu ant-menu-horizontal ant-menu-root ant-menu-light"><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-horizontal ant-menu-overflowed-submenu" style="display:none;"><div aria-haspopup="true" class="ant-menu-submenu-title"><span>···</span><i class="ant-menu-submenu-arrow"></i></div></li><li role="menuitem" class="ant-menu-item"><a href="/" class="router-link-active">
+          YO
+        </a></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-horizontal ant-menu-overflowed-submenu" style="display:none;"><div aria-haspopup="true" class="ant-menu-submenu-title"><span>···</span><i class="ant-menu-submenu-arrow"></i></div></li><li role="menuitem" class="ant-menu-item ant-menu-item-selected"><a href="/blog/" class="router-link-active">
+          笔记
+        </a></li><li role="menuitem" class="ant-menu-submenu ant-menu-submenu-horizontal ant-menu-overflowed-submenu" style="visibility:hidden;position:absolute;"><div aria-haspopup="true" class="ant-menu-submenu-title"><span>···</span><i class="ant-menu-submenu-arrow"></i></div></li></ul> <a href="https://github.com/heiheiyuan" target="_blank" rel="noopener noreferrer" class="repo-link"><i aria-label="icon: github" class="anticon anticon-github"><svg viewBox="64 64 896 896" focusable="false" data-icon="github" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9a127.5 127.5 0 0 1 38.1 91v112.5c.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z"></path></svg></i></a></nav></div></div> <!----></header> <aside class="sidebar"><!----> <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>介绍</span> <span class="arrow right"><i aria-label="icon: down" class="anticon anticon-down"><svg viewBox="64 64 896 896" focusable="false" data-icon="down" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg></i></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>数据结构</span> <span class="arrow right"><i aria-label="icon: down" class="anticon anticon-down"><svg viewBox="64 64 896 896" focusable="false" data-icon="down" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg></i></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>算法</span> <span class="arrow right"><i aria-label="icon: down" class="anticon anticon-down"><svg viewBox="64 64 896 896" focusable="false" data-icon="down" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg></i></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>多线程</span> <span class="arrow down"><i aria-label="icon: down" class="anticon anticon-down"><svg viewBox="64 64 896 896" focusable="false" data-icon="down" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg></i></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/blog/多线程01——进程、线程、任务.html" title="进程、线程、任务" class="sidebar-link">进程、线程、任务</a></li><li><a href="/blog/多线程02——特性.html" title="特性" class="sidebar-link">特性</a></li><li><a href="/blog/多线程03——同步机制.html" title="同步机制" class="sidebar-link">同步机制</a></li><li><a href="/blog/多线程04——玩转线程.html" title="玩转线程" class="active sidebar-link">玩转线程</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#可并发点" title="可并发点" class="sidebar-link">可并发点</a></li><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#分而治之" title="分而治之" class="sidebar-link">分而治之</a></li><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#基于数据分割" title="基于数据分割" class="sidebar-link">基于数据分割</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#基本思想" title="基本思想" class="sidebar-link">基本思想</a></li><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#案例实战" title="案例实战" class="sidebar-link">案例实战</a></li><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#案例思考" title="案例思考" class="sidebar-link">案例思考</a></li></ul></li><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#基于任务分割" title="基于任务分割" class="sidebar-link">基于任务分割</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#基本思想-2" title="基本思想" class="sidebar-link">基本思想</a></li><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#以资源消耗分类" title="以资源消耗分类" class="sidebar-link">以资源消耗分类</a></li><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#按处理步骤分割" title="按处理步骤分割" class="sidebar-link">按处理步骤分割</a></li></ul></li><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#合理设置线程数" title="合理设置线程数" class="sidebar-link">合理设置线程数</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#amdahl-s定律" title="Amdahl's定律" class="sidebar-link">Amdahl's定律</a></li><li class="sidebar-sub-header"><a href="/blog/多线程04——玩转线程.html#线程数设置的原则" title="线程数设置的原则" class="sidebar-link">线程数设置的原则</a></li></ul></li></ul></li><li><a href="/blog/多线程05——线程间协作.html" title="线程间协作" class="sidebar-link">线程间协作</a></li></ul></section></li></ul></aside> <main class="page"> <div class="theme-antdocs-content content__default"><h1 id="玩转线程"><a href="#玩转线程" class="header-anchor">#</a> 玩转线程</h1> <blockquote><p>读书笔记：黄文海.Java多线程编程实战指南（核心篇）(Java多线程编程实战系列)(Kindle位置1032).电子工业出版社.Kindle版本.</p></blockquote> <p></p><div class="table-of-contents"><ul><li><a href="#玩转线程">玩转线程</a><ul><li><a href="#可并发点">可并发点</a></li><li><a href="#分而治之">分而治之</a></li><li><a href="#基于数据分割">基于数据分割</a><ul><li><a href="#基本思想">基本思想</a></li><li><a href="#案例实战">案例实战</a></li><li><a href="#案例思考">案例思考</a></li></ul></li><li><a href="#基于任务分割">基于任务分割</a><ul><li><a href="#基本思想">基本思想</a></li><li><a href="#以资源消耗分类">以资源消耗分类</a><ul><li><a href="#案例实战">案例实战</a></li><li><a href="#案例思考">案例思考</a></li></ul></li><li><a href="#按处理步骤分割">按处理步骤分割</a></li></ul></li><li><a href="#合理设置线程数">合理设置线程数</a><ul><li><a href="#amdahl-s定律">Amdahl's定律</a></li><li><a href="#线程数设置的原则">线程数设置的原则</a></li></ul></li></ul></li></ul></div><p></p> <h2 id="可并发点"><a href="#可并发点" class="header-anchor">#</a> 可并发点</h2> <p>要实现多线程编程的目标——并发计算，我们首先需要找到程序中哪些处理是可以并发化，即由串行改为并发的。这些可并发化的处理被称为可并发点。</p> <h2 id="分而治之"><a href="#分而治之" class="header-anchor">#</a> 分而治之</h2> <p>使用分而治之的思想进行多线程编程，我们首先需要将程序算法中只能串行的部分与可以并发的部分区分开来，然后使用专门的线程（工作者线程）去并发地执行那些可并发化的部分（可并发点）。具体来说，多线程编程中分而治之的使用主要有两种方式：<strong>基于数据的分割</strong>和<strong>基于任务的分割</strong>。前者从数据入手，将程序的输入数据分解为若干规模较小的数据，并利用若干工作者线程并发处理这些分解后的数据。后者从程序的处理任务（步骤）入手，将任务分解为若干子任务，并分配若干工作者线程并发执行这些子任务。</p> <h2 id="基于数据分割"><a href="#基于数据分割" class="header-anchor">#</a> 基于数据分割</h2> <h3 id="基本思想"><a href="#基本思想" class="header-anchor">#</a> 基本思想</h3> <p>将原始输入数据按照一定的规则（比如均分）分解为若干规模较小的子输入（数据），并使用工作者线程来对这些子输入进行处理，从而实现对输入数据的并发处理。对子输入的处理，我们称之为子任务。因此，基于数据的分割的结果是产生一批子任务，这些子任务由专门的工作者线程负责执行。</p> <p><img src="https://i.loli.net/2021/09/23/k19B4OgwDRhSuAx.png" alt="image-20210923105930597"></p> <h3 id="案例实战"><a href="#案例实战" class="header-anchor">#</a> 案例实战</h3> <p>我们下载大文件的时候往往是使用专门的下载软件而不是直接使用浏览器。这些下载软件下载大文件时比较快的一个重要原因就是它们使用多线程技术。例如，一个大小为600MB的文件在网络带宽为100Mbps的情况下，使用单个线程下载该文件至少需要耗时48（=600/(100/8)）秒。如果我们采用3个线程来下载该文件，其中每个线程分别下载该文件的一个部分，那么下载这个文件所需的时间基本上可以减少为16（=600/3/(100/8)）秒，比起单线程下载节省了2/3的时间。按照这个思路实现的一个基于多线程的大文件下载器，代码如清单4-1所示。首先，我们先获取待下载资源的大小，这个大小相当于文件下载器的输入数据的原始规模（总规模）。接着，我们根据设定的下载线程数（workerThreadsCount）来决定子任务的总个数，并由此确定每个子任务负责下载的数据段的范围（起始字节到结束字节，lowerBound～upperBound）。然后我们分别创建相应的下载子任务（DownloadTask类实例）并为每个下载任务创建相应的下载线程。这些线程启动后就会并发地下载大文件中的相应部分。</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * 大文件下载器
+ *
+ * @author Viscent Huang
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BigFileDownloader</span> <span class="token punctuation">{</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">URL</span> requestURL<span class="token punctuation">;</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token keyword">long</span> fileSize<span class="token punctuation">;</span>
+  <span class="token comment">/**
+   * 负责已下载数据的存储
+   */</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">Storage</span> storage<span class="token punctuation">;</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">AtomicBoolean</span> taskCanceled <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AtomicBoolean</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">BigFileDownloader</span><span class="token punctuation">(</span><span class="token class-name">String</span> strURL<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    requestURL <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">URL</span><span class="token punctuation">(</span>strURL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 获取待下载资源的大小（单位：字节）</span>
+    fileSize <span class="token operator">=</span> <span class="token function">retieveFileSize</span><span class="token punctuation">(</span>requestURL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Debug</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;file total size:%s&quot;</span><span class="token punctuation">,</span> fileSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> fileName <span class="token operator">=</span> strURL<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span>strURL<span class="token punctuation">.</span><span class="token function">lastIndexOf</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 创建负责存储已下载数据的对象</span>
+    storage <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Storage</span><span class="token punctuation">(</span>fileSize<span class="token punctuation">,</span> fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">/**
+   * 下载指定的文件
+   *
+   * @param taskCount
+   *          任务个数
+   * @param reportInterval
+   *          下载进度报告周期
+   * @throws Exception
+   */</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">download</span><span class="token punctuation">(</span><span class="token keyword">int</span> taskCount<span class="token punctuation">,</span> <span class="token keyword">long</span> reportInterval<span class="token punctuation">)</span>
+      <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">long</span> chunkSizePerThread <span class="token operator">=</span> fileSize <span class="token operator">/</span> taskCount<span class="token punctuation">;</span>
+    <span class="token comment">// 下载数据段的起始字节</span>
+    <span class="token keyword">long</span> lowerBound <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">// 下载数据段的结束字节</span>
+    <span class="token keyword">long</span> upperBound <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token class-name">DownloadTask</span> dt<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> taskCount <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      lowerBound <span class="token operator">=</span> i <span class="token operator">*</span> chunkSizePerThread<span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">==</span> taskCount <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        upperBound <span class="token operator">=</span> fileSize<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        upperBound <span class="token operator">=</span> lowerBound <span class="token operator">+</span> chunkSizePerThread <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token comment">// 创建下载任务</span>
+      dt <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DownloadTask</span><span class="token punctuation">(</span>lowerBound<span class="token punctuation">,</span> upperBound<span class="token punctuation">,</span> requestURL<span class="token punctuation">,</span> storage<span class="token punctuation">,</span>
+          taskCanceled<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">dispatchWork</span><span class="token punctuation">(</span>dt<span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// 定时报告下载进度</span>
+    <span class="token function">reportProgress</span><span class="token punctuation">(</span>reportInterval<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 清理程序占用的资源</span>
+    <span class="token function">doCleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doCleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Tools</span><span class="token punctuation">.</span><span class="token function">silentClose</span><span class="token punctuation">(</span>storage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">cancelDownload</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>taskCanceled<span class="token punctuation">.</span><span class="token function">compareAndSet</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">doCleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">dispatchWork</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">DownloadTask</span> dt<span class="token punctuation">,</span> <span class="token keyword">int</span> workerIndex<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 创建下载线程</span>
+    <span class="token class-name">Thread</span> workerThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token annotation punctuation">@Override</span>
+      <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+          dt<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token comment">// 取消整个文件的下载</span>
+          <span class="token function">cancelDownload</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    workerThread<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">&quot;downloader-&quot;</span> <span class="token operator">+</span> workerIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    workerThread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// 根据指定的URL获取相应文件的大小</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">long</span> <span class="token function">retieveFileSize</span><span class="token punctuation">(</span><span class="token class-name">URL</span> requestURL<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> size <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token class-name">HttpURLConnection</span> conn <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      conn <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">)</span> requestURL<span class="token punctuation">.</span><span class="token function">openConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      conn<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span><span class="token string">&quot;HEAD&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      conn<span class="token punctuation">.</span><span class="token function">setRequestProperty</span><span class="token punctuation">(</span><span class="token string">&quot;Connection&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;Keep-alive&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      conn<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">int</span> statusCode <span class="token operator">=</span> conn<span class="token punctuation">.</span><span class="token function">getResponseCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">.</span>HTTP_OK <span class="token operator">!=</span> statusCode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Exception</span><span class="token punctuation">(</span><span class="token string">&quot;Server exception,status code:&quot;</span> <span class="token operator">+</span> statusCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token class-name">String</span> cl <span class="token operator">=</span> conn<span class="token punctuation">.</span><span class="token function">getHeaderField</span><span class="token punctuation">(</span><span class="token string">&quot;Content-Length&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      size <span class="token operator">=</span> <span class="token class-name">Long</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>cl<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">!=</span> conn<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        conn<span class="token punctuation">.</span><span class="token function">disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> size<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// 报告下载进度</span>
+  <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">reportProgress</span><span class="token punctuation">(</span><span class="token keyword">long</span> reportInterval<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">float</span> lastCompletion<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> completion <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>taskCanceled<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      lastCompletion <span class="token operator">=</span> completion<span class="token punctuation">;</span>
+      completion <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>storage<span class="token punctuation">.</span><span class="token function">getTotalWrites</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span> <span class="token operator">/</span> fileSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>completion <span class="token operator">==</span> <span class="token number">100</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>completion <span class="token operator">-</span> lastCompletion <span class="token operator">&gt;=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Debug</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;Completion:%s%%&quot;</span><span class="token punctuation">,</span> completion<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>completion <span class="token operator">&gt;=</span> <span class="token number">90</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          reportInterval <span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+      <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span>reportInterval<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token class-name">Debug</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;Completion:%s%%&quot;</span><span class="token punctuation">,</span> completion<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>文件下载器的待下载资源相当于位于Web服务器上的一个大文件（输入），我们从逻辑上将其分解为若干子文件（起始字节和结束字节所表示的数据段），并使用多个工作者线程各自负责这些子文件的下载。比如，待下载资源的大小为600MB，如果我们指定3个下载线程，那么每个下载线程只需要下载这个大文件中200MB的数据。因此，该案例实际上是将程序算法中从服务器上下载数据这个部分由原来单线程程序的串行处理变成了并发处理，即实现了并发化。</p> <h3 id="案例思考"><a href="#案例思考" class="header-anchor">#</a> 案例思考</h3> <p>基于数据的分割的结果是产生多个同质工作者线程，即任务处理逻辑相同的线程。例如，上述案例中的BigFileDownloader创建的工作者线程都是DownloadTask的实例。整体思想不难理解，但是实际运用中还需要着重考虑以下方面：</p> <ul><li>工作者线程数量的合理设置问题。在原始输入规模一定的情况下，增加工作者线程数量可以减小子输入的规模，从而减少每个工作者线程执行任务所需的时间。但是线程数量的增加也会导致其他开销（比如上下文切换）增加。例如，上述案例从表面上看，我们似乎可以指定更多的下载线程数来缩短资源下载耗时。比如，我们设定10个线程用于下载一个大小为600MB的资源，那么每个线程仅需要下载这个大文件中60MB的数据，这样看来似乎我们仅需要单线程下载的1/6时间就可以完成整个资源下载。但实际的结果却可能并非如此：增加下载线程数的确可以减少每个下载线程的输入规模（子输入的规模），从而缩短每个下载线程完成数据段下载所需的时间；但是这同时也增加了上下文切换的开销、线程创建与销毁的开销、建立网络连接的开销以及锁的争用等开销，而这些增加的开销可能无法被子输入规模减小所带来的好处所抵消。另一方面，工作者线程数量过少又可能导致子输入的规模仍然过大，这使得计算效率提升不明显。</li> <li>工作者线程的异常处理问题。对于一个工作者线程执行过程中出现的异常，在本案例的一个下载线程执行过程中出现异常的时候，这个线程是可以进行重试（针对可恢复的故障）呢，还是说直接就算整个资源的下载失败呢？如果是算这个资源下载失败，那么此时其他工作者线程就没有必要继续运行下去了。</li> <li>原始输入规模未知问题。在上述例子中，由于原始输入的规模是事先可知的，因此我们可以采用简单的均分对原始输入进行分解。但当我们无法事先确定原始输入的规模，或者事先确定原始输入规模是一个开销极大的计算。比如，要从几百个日志文件（其中每个文件可包含上万条记录）中统计出我们所需的信息，尽管理论上我们可以事先计算出总记录条数，但是这样做的开销会比较大，因而实际上这是不可行的。此时原始输入的规模就相当于事先不可知。对于这种原始输入规模事先不可知的问题，我们可以采用批处理的方式对原始输入进行分解：聚集了一批数据之后再将这些数据指派给工作者线程进行处理。在批处理的分解方式中，工作者线程往往是事先启动的，并且我们还需要考虑这些工作者线程的负载均衡问题，即新聚集的一批数据按照什么样的规则被指派给哪个工作者线程的问题。</li> <li>程序的复杂性增加的问题。基于数据的分割产生的多线程程序可能比相应的单线程程序要复杂。例如，上述案例中虽然多个工作者线程并发地从服务器上下载大文件可以提升计算效率，但是它也带来一个问题：这些数据段是并发地从服务器上下载的，但是我们最终要得到的是一个完整的大文件，而不是几个较小的文件。因此，我们有两种选择：其中一种方法是，各个工作者线程将其下载的数据段分别写入各自的本地文件（子文件），等到所有工作者线程结束之后，我们再将这些子文件合并为我们最终需要的文件。显然，当待下载的资源非常大的时候合并这些子文件也是一笔不小的开销。另外一种方法是将各个工作者线程从服务器上下载到的数据都写入同一个本地文件，这个文件被写满之后就是我们最终所需的大文件。第二种方法看起来比较简单，但是这里面有个矛盾需要调和：文件数据是并发地从服务器上下载（读取）的，但是将这些数据写入本地文件的时候，我们又必须确保这些数据按照原始文件（服务器上的资源）的顺序被写入这个本地文件的相应位置（起始字节和结束字节）。另外，每个下载线程从网络读取一段数据（例如1KB的数据）就将其写入文件这种方法固然简单，但是容易增加I/O的次数。</li></ul> <p>有鉴于此，上述案例可采用了缓冲的方法：下载线程每次从网络读取的数据都是先被写入缓冲区，只有当这个缓冲区满的时候其中的内容才会被写入本地文件。这个缓冲区是通过类DownloadBuffer实现的，将缓冲区中的内容写入本地文件是通过类Storage实现的。由此可见，上述案例中的多线程程序比起相应的单线程程序要复杂得多！</p> <p>DownloadTask源码</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * 下载子任务
+ *
+ * @author Viscent Huang
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DownloadTask</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">long</span> lowerBound<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">long</span> upperBound<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">DownloadBuffer</span> xbuf<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">URL</span> requestURL<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">AtomicBoolean</span> cancelFlag<span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">DownloadTask</span><span class="token punctuation">(</span><span class="token keyword">long</span> lowerBound<span class="token punctuation">,</span> <span class="token keyword">long</span> upperBound<span class="token punctuation">,</span> <span class="token class-name">URL</span> requestURL<span class="token punctuation">,</span>
+      <span class="token class-name">Storage</span> storage<span class="token punctuation">,</span> <span class="token class-name">AtomicBoolean</span> cancelFlag<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>lowerBound <span class="token operator">=</span> lowerBound<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>upperBound <span class="token operator">=</span> upperBound<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>requestURL <span class="token operator">=</span> requestURL<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>xbuf <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DownloadBuffer</span><span class="token punctuation">(</span>lowerBound<span class="token punctuation">,</span> upperBound<span class="token punctuation">,</span> storage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>cancelFlag <span class="token operator">=</span> cancelFlag<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// 对指定的URL发起HTTP分段下载请求</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token class-name">InputStream</span> <span class="token function">issueRequest</span><span class="token punctuation">(</span><span class="token class-name">URL</span> requestURL<span class="token punctuation">,</span> <span class="token keyword">long</span> lowerBound<span class="token punctuation">,</span>
+      <span class="token keyword">long</span> upperBound<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Thread</span> me <span class="token operator">=</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Debug</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span>me <span class="token operator">+</span> <span class="token string">&quot;-&gt;[&quot;</span> <span class="token operator">+</span> lowerBound <span class="token operator">+</span> <span class="token string">&quot;,&quot;</span> <span class="token operator">+</span> upperBound <span class="token operator">+</span> <span class="token string">&quot;]&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> <span class="token class-name">HttpURLConnection</span> conn<span class="token punctuation">;</span>
+    <span class="token class-name">InputStream</span> in <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    conn <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">)</span> requestURL<span class="token punctuation">.</span><span class="token function">openConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> strConnTimeout <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">&quot;x.dt.conn.timeout&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> connTimeout <span class="token operator">=</span> <span class="token keyword">null</span> <span class="token operator">==</span> strConnTimeout <span class="token operator">?</span> <span class="token number">60000</span> <span class="token operator">:</span> <span class="token class-name">Integer</span>
+        <span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>strConnTimeout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    conn<span class="token punctuation">.</span><span class="token function">setConnectTimeout</span><span class="token punctuation">(</span>connTimeout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name">String</span> strReadTimeout <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">&quot;x.dt.read.timeout&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> readTimeout <span class="token operator">=</span> <span class="token keyword">null</span> <span class="token operator">==</span> strReadTimeout <span class="token operator">?</span> <span class="token number">60000</span> <span class="token operator">:</span> <span class="token class-name">Integer</span>
+        <span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>strReadTimeout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    conn<span class="token punctuation">.</span><span class="token function">setReadTimeout</span><span class="token punctuation">(</span>readTimeout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    conn<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span><span class="token string">&quot;GET&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    conn<span class="token punctuation">.</span><span class="token function">setRequestProperty</span><span class="token punctuation">(</span><span class="token string">&quot;Connection&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;Keep-alive&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Range: bytes=0-1024</span>
+    conn<span class="token punctuation">.</span><span class="token function">setRequestProperty</span><span class="token punctuation">(</span><span class="token string">&quot;Range&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;bytes=&quot;</span> <span class="token operator">+</span> lowerBound <span class="token operator">+</span> <span class="token string">&quot;-&quot;</span> <span class="token operator">+</span> upperBound<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    conn<span class="token punctuation">.</span><span class="token function">setDoInput</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    conn<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> statusCode <span class="token operator">=</span> conn<span class="token punctuation">.</span><span class="token function">getResponseCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">.</span>HTTP_PARTIAL <span class="token operator">!=</span> statusCode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      conn<span class="token punctuation">.</span><span class="token function">disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IOException</span><span class="token punctuation">(</span><span class="token string">&quot;Server exception,status code:&quot;</span> <span class="token operator">+</span> statusCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token class-name">Debug</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span>me <span class="token operator">+</span> <span class="token string">&quot;-Content-Range:&quot;</span> <span class="token operator">+</span> conn<span class="token punctuation">.</span><span class="token function">getHeaderField</span><span class="token punctuation">(</span><span class="token string">&quot;Content-Range&quot;</span><span class="token punctuation">)</span>
+        <span class="token operator">+</span> <span class="token string">&quot;,connection:&quot;</span> <span class="token operator">+</span> conn<span class="token punctuation">.</span><span class="token function">getHeaderField</span><span class="token punctuation">(</span><span class="token string">&quot;connection&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    in <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedInputStream</span><span class="token punctuation">(</span>conn<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token annotation punctuation">@Override</span>
+      <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+          <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+          conn<span class="token punctuation">.</span><span class="token function">disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> in<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>cancelFlag<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token class-name">ReadableByteChannel</span> channel <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      channel <span class="token operator">=</span> <span class="token class-name">Channels</span><span class="token punctuation">.</span><span class="token function">newChannel</span><span class="token punctuation">(</span><span class="token function">issueRequest</span><span class="token punctuation">(</span>requestURL<span class="token punctuation">,</span> lowerBound<span class="token punctuation">,</span>
+          upperBound<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token class-name">ByteBuffer</span> buf <span class="token operator">=</span> <span class="token class-name">ByteBuffer</span><span class="token punctuation">.</span><span class="token function">allocate</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>cancelFlag<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> channel<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 将从网络读取的数据写入缓冲区</span>
+        xbuf<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        buf<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      <span class="token class-name">Tools</span><span class="token punctuation">.</span><span class="token function">silentClose</span><span class="token punctuation">(</span>channel<span class="token punctuation">,</span> xbuf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>DownloadBuffer源码</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DownloadBuffer</span> <span class="token keyword">implements</span> <span class="token class-name">Closeable</span> <span class="token punctuation">{</span>
+  <span class="token comment">/**
+   * 当前Buffer中缓冲的数据相对于整个存储文件的位置偏移
+   */</span>
+  <span class="token keyword">private</span> <span class="token keyword">long</span> globalOffset<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">long</span> upperBound<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">int</span> offset <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token class-name">ByteBuffer</span> byteBuf<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Storage</span> storage<span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">DownloadBuffer</span><span class="token punctuation">(</span><span class="token keyword">long</span> globalOffset<span class="token punctuation">,</span> <span class="token keyword">long</span> upperBound<span class="token punctuation">,</span>
+      <span class="token keyword">final</span> <span class="token class-name">Storage</span> storage<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>globalOffset <span class="token operator">=</span> globalOffset<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>upperBound <span class="token operator">=</span> upperBound<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>byteBuf <span class="token operator">=</span> <span class="token class-name">ByteBuffer</span><span class="token punctuation">.</span><span class="token function">allocate</span><span class="token punctuation">(</span><span class="token number">1024</span> <span class="token operator">*</span> <span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>storage <span class="token operator">=</span> storage<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">write</span><span class="token punctuation">(</span><span class="token class-name">ByteBuffer</span> buf<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> length <span class="token operator">=</span> buf<span class="token punctuation">.</span><span class="token function">position</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> <span class="token keyword">int</span> capacity <span class="token operator">=</span> byteBuf<span class="token punctuation">.</span><span class="token function">capacity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 当前缓冲区已满，或者剩余容量不够容纳新数据</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>offset <span class="token operator">+</span> length <span class="token operator">&gt;</span> capacity <span class="token operator">||</span> length <span class="token operator">==</span> capacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 将缓冲区中的数据写入文件</span>
+      <span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    byteBuf<span class="token punctuation">.</span><span class="token function">position</span><span class="token punctuation">(</span>offset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    buf<span class="token punctuation">.</span><span class="token function">flip</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    byteBuf<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    offset <span class="token operator">+=</span> length<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> length<span class="token punctuation">;</span>
+    byteBuf<span class="token punctuation">.</span><span class="token function">flip</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    length <span class="token operator">=</span> storage<span class="token punctuation">.</span><span class="token function">store</span><span class="token punctuation">(</span>globalOffset<span class="token punctuation">,</span> byteBuf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    byteBuf<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    globalOffset <span class="token operator">+=</span> length<span class="token punctuation">;</span>
+    offset <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Debug</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;globalOffset:%s,upperBound:%s&quot;</span><span class="token punctuation">,</span> globalOffset<span class="token punctuation">,</span> upperBound<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>globalOffset <span class="token operator">&lt;</span> upperBound<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Storage源码</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Storage</span> <span class="token keyword">implements</span> <span class="token class-name">Closeable</span><span class="token punctuation">,</span> <span class="token class-name">AutoCloseable</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">RandomAccessFile</span> storeFile<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">FileChannel</span> storeChannel<span class="token punctuation">;</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">AtomicLong</span> totalWrites <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AtomicLong</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">Storage</span><span class="token punctuation">(</span><span class="token keyword">long</span> fileSize<span class="token punctuation">,</span> <span class="token class-name">String</span> fileShortName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span> fullFileName <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">&quot;java.io.tmpdir&quot;</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">&quot;/&quot;</span>
+        <span class="token operator">+</span> fileShortName<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> localFileName<span class="token punctuation">;</span>
+    localFileName <span class="token operator">=</span> <span class="token function">createStoreFile</span><span class="token punctuation">(</span>fileSize<span class="token punctuation">,</span> fullFileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    storeFile <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RandomAccessFile</span><span class="token punctuation">(</span>localFileName<span class="token punctuation">,</span> <span class="token string">&quot;rw&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    storeChannel <span class="token operator">=</span> storeFile<span class="token punctuation">.</span><span class="token function">getChannel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">/**
+   * 将data中指定的数据写入文件
+   *
+   * @param offset
+   *          写入数据在整个文件中的起始偏移位置
+   * @param byteBuf
+   *          byteBuf必须在该方法调用前执行byteBuf.flip()
+   * @throws IOException
+   * @return 写入文件的数据长度
+   */</span>
+  <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">store</span><span class="token punctuation">(</span><span class="token keyword">long</span> offset<span class="token punctuation">,</span> <span class="token class-name">ByteBuffer</span> byteBuf<span class="token punctuation">)</span>
+      <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> length<span class="token punctuation">;</span>
+    storeChannel<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>byteBuf<span class="token punctuation">,</span> offset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    length <span class="token operator">=</span> byteBuf<span class="token punctuation">.</span><span class="token function">limit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    totalWrites<span class="token punctuation">.</span><span class="token function">addAndGet</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> length<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">long</span> <span class="token function">getTotalWrites</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> totalWrites<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token class-name">String</span> <span class="token function">createStoreFile</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token keyword">long</span> fileSize<span class="token punctuation">,</span> <span class="token class-name">String</span> fullFileName<span class="token punctuation">)</span>
+      <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token class-name">File</span> file <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>fullFileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Debug</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">&quot;create local file:%s&quot;</span><span class="token punctuation">,</span> fullFileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">RandomAccessFile</span> raf<span class="token punctuation">;</span>
+    raf <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RandomAccessFile</span><span class="token punctuation">(</span>file<span class="token punctuation">,</span> <span class="token string">&quot;rw&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      raf<span class="token punctuation">.</span><span class="token function">setLength</span><span class="token punctuation">(</span>fileSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      <span class="token class-name">Tools</span><span class="token punctuation">.</span><span class="token function">silentClose</span><span class="token punctuation">(</span>raf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> fullFileName<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>storeChannel<span class="token punctuation">.</span><span class="token function">isOpen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token class-name">Tools</span><span class="token punctuation">.</span><span class="token function">silentClose</span><span class="token punctuation">(</span>storeChannel<span class="token punctuation">,</span> storeFile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="基于任务分割"><a href="#基于任务分割" class="header-anchor">#</a> 基于任务分割</h2> <h3 id="基本思想-2"><a href="#基本思想-2" class="header-anchor">#</a> 基本思想</h3> <p>是将任务（原始任务）按照一定的规则分解成若干子任务，并使用专门的工作者线程去执行这些子任务，从而实现任务的并发执行。</p> <p><img src="https://i.loli.net/2021/09/23/8hno5Cjtqg4fNmO.png" alt="image-20210923141200776"></p> <p>按照原始任务的分解方式来划分，基于任务的分解可以分为按任务的资源消耗属性分割和按处理步骤分割这两种。</p> <h3 id="以资源消耗分类"><a href="#以资源消耗分类" class="header-anchor">#</a> 以资源消耗分类</h3> <p>按照其消耗的主要资源可划分为CPU密集型（CPU-intensive）任务和I/O密集型（I/O-intensive）任务。执行这些任务的线程也相应地被称为CPU密集型线程和I/O密集型线程。CPU密集型任务执行过程中消耗的主要资源是CPU时间，CPU密集型任务的一个典型例子是加密和解密；I/O密集型任务执行过程中消耗的主要资源是I/O资源（如网络和磁盘等），典型的I/O密集型任务包括文件读写、网络读写等。</p> <p>一个线程所执行的任务实际上往往同时兼具CPU密集型任务和I/O密集型任务特征，我们称之为混合型任务。有时候，我们可能需要将这种混合型任务进一步分解为CPU密集型和I/O密集型这两种子任务，并使用专门的工作者线程来负责这些子任务的执行，以提高并发性。</p> <h4 id="案例实战-2"><a href="#案例实战-2" class="header-anchor">#</a> <strong>案例实战</strong></h4> <p>一款统计工具，用于从指定的接口日志文件中统计出外部系统处理指定请求的响应延时。</p> <p>响应延时统计的算法如下：</p> <p>以一定的时间（如10s）为周期，然后将请求时间落在该周期内的指定请求的响应延时累加起来。在输出统计结果的时候，我们只需要逐个地将各个周期的响应延时累加值除以周期长度就可以得到该周期内的平均响应延时。对于单条请求的响应延时我们可以采用这种方法计算：在读取到一个表示请求的日志记录时记录下相应请求的消息唯一标识（traceId）、请求时间戳，然后读取到一条表示响应的日志记录时，根据指定的消息唯一标识差值计算出与该响应记录对应的请求记录的消息唯一标识，凭此消息唯一标识找到之前存储的请求时间戳，通过计算该响应记录的时间戳与相应的请求时间戳之差就可以得到单条请求的响应延时。</p> <p>一个接口日志文件最多可以包含1万条记录，而我们可能需要从指定的上百个这样的文件进行统计，即统计程序的输入规模可能达到几百万甚至上千万。为了尽量提高统计的效率，这个问题如果按照基于数据的分割。例如，假设指定的接口日志文件个数为400个，那么我们可以考虑指定4个线程，其中每个线程负责对指定日志文件中的100个文件进行统计，即这些工作者线程各自逐条读取100个文件中的记录，再根据记录中的数据按照上述算法进行统计。这样做存在以下几个问题。</p> <ul><li><p><strong>问题1</strong>　增加程序的复杂性：由于代表一对请求和响应的两条日志记录可能被分别存储在两个日志文件中，因此多个工作者线程并发地读取日志文件的时候可能出现代表响应的日志记录先被读取，而代表相应请求的日志记录后被读取。这样一来实现上述算法就有些困难。</p></li> <li><p><strong>问题2</strong>　可能导致I/O资源争用增加而减低I/O效率：机械式硬盘在顺序读取文件的时候效率会比较高，而多个工作者线程并发地读取多个文件可能反而会降低文件读取的效率。</p></li> <li><p><strong>问题3</strong>　可能导致处理器时间的浪费：一个工作者线程在等待磁盘返回数据的期间，该线程是处于暂停（WAITING）状态的，它无法执行其他计算，从而导致处理器时间的浪费。</p></li></ul> <p>由此可见，在该案例中直接使用基于数据的分割是不太合适的。因此，为了便于评估其他的实现方案，我们暂时先考虑一下单线程实现方式的抽象版。</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * 对统计程序的算法步骤进行抽象。
+ *
+ * @author Viscent Huang
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">AbstractStatTask</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> TIME_STAMP_FORMAT <span class="token operator">=</span> <span class="token string">&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Calendar</span> calendar<span class="token punctuation">;</span>
+  <span class="token comment">// 此处是单线程访问，故其使用是线程安全的</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">SimpleDateFormat</span> sdf<span class="token punctuation">;</span>
+  <span class="token comment">// 采样周期，单位：s</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> sampleInterval<span class="token punctuation">;</span>
+  <span class="token comment">// 统计处理逻辑类</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">StatProcessor</span> recordProcessor<span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">AbstractStatTask</span><span class="token punctuation">(</span><span class="token keyword">int</span> sampleInterval<span class="token punctuation">,</span> <span class="token keyword">int</span> traceIdDiff<span class="token punctuation">,</span>
+      <span class="token class-name">String</span> expectedOperationName<span class="token punctuation">,</span> <span class="token class-name">String</span> expectedExternalDeviceList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">(</span>sampleInterval<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">RecordProcessor</span><span class="token punctuation">(</span>sampleInterval<span class="token punctuation">,</span>
+        traceIdDiff<span class="token punctuation">,</span>
+        expectedOperationName<span class="token punctuation">,</span> expectedExternalDeviceList<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">AbstractStatTask</span><span class="token punctuation">(</span><span class="token keyword">int</span> sampleInterval<span class="token punctuation">,</span>
+      <span class="token class-name">StatProcessor</span> recordProcessor<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">SimpleTimeZone</span> stz <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SimpleTimeZone</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">&quot;UTC&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>sdf <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SimpleDateFormat</span><span class="token punctuation">(</span>TIME_STAMP_FORMAT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    sdf<span class="token punctuation">.</span><span class="token function">setTimeZone</span><span class="token punctuation">(</span>stz<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>calendar <span class="token operator">=</span> <span class="token class-name">Calendar</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span>stz<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>sampleInterval <span class="token operator">=</span> sampleInterval<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>recordProcessor <span class="token operator">=</span> recordProcessor<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">/**
+   * 留给子类用于实现统计操作的抽象方法。
+   */</span>
+  <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">doCalculate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span>
+      <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 执行统计逻辑</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token function">doCalculate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// 获取统计结果</span>
+    <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">DelayItem</span><span class="token punctuation">&gt;</span></span> result <span class="token operator">=</span> recordProcessor<span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 输出统计结果</span>
+    <span class="token function">report</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">report</span><span class="token punctuation">(</span><span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">DelayItem</span><span class="token punctuation">&gt;</span></span> summaryResult<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> sampleCount<span class="token punctuation">;</span>
+    <span class="token keyword">final</span> <span class="token class-name">PrintStream</span> ps <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">;</span>
+    ps<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">&quot;%s\t\t%s\t%s\t%s%n&quot;</span><span class="token punctuation">,</span>
+        <span class="token string">&quot;Timestamp&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;AvgDelay(ms)&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;TPS&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;SampleCount&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">DelayItem</span> delayStatData <span class="token operator">:</span> summaryResult<span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      sampleCount <span class="token operator">=</span> delayStatData<span class="token punctuation">.</span><span class="token function">getSampleCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      ps<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">&quot;%s%8d%8d%8d%n&quot;</span><span class="token punctuation">,</span>
+          <span class="token function">getUTCTimeStamp</span><span class="token punctuation">(</span>delayStatData
+              <span class="token punctuation">.</span><span class="token function">getTimeStamp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> delayStatData<span class="token punctuation">.</span><span class="token function">getTotalDelay</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+              <span class="token operator">/</span> sampleCount<span class="token punctuation">,</span>
+          sampleCount
+              <span class="token operator">/</span> sampleInterval<span class="token punctuation">,</span> sampleCount<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token class-name">String</span> <span class="token function">getUTCTimeStamp</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeStamp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    calendar<span class="token punctuation">.</span><span class="token function">setTimeInMillis</span><span class="token punctuation">(</span>timeStamp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> tempTs <span class="token operator">=</span> sdf<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>calendar<span class="token punctuation">.</span><span class="token function">getTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> tempTs<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>在Runnable接口的run方法中定义了统计程序的算法步骤：执行统计逻辑、获取统计结果和打印统计结果。</p> <p>无论是采用单线程还是多线程方式实现这个算法，其中不同的部分只有第1步，因此使用抽象方法doCalculate来表示这个步骤。首先以单线程的方式实现这个统计程序，只需要创建AbstractStatTask的一个子类SimpleStatTask，并在该子类中实现抽象方法doCalculate即可。</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SimpleStatTask</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractStatTask</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">InputStream</span> in<span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">SimpleStatTask</span><span class="token punctuation">(</span><span class="token class-name">InputStream</span> in<span class="token punctuation">,</span> <span class="token keyword">int</span> sampleInterval<span class="token punctuation">,</span> <span class="token keyword">int</span> traceIdDiff<span class="token punctuation">,</span>
+      <span class="token class-name">String</span> expectedOperationName<span class="token punctuation">,</span> <span class="token class-name">String</span> expectedExternalDeviceList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span>sampleInterval<span class="token punctuation">,</span> traceIdDiff<span class="token punctuation">,</span> expectedOperationName<span class="token punctuation">,</span>
+        expectedExternalDeviceList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>in <span class="token operator">=</span> in<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doCalculate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span> strBufferSize <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">&quot;x.input.buffer&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> inputBufferSize <span class="token operator">=</span> <span class="token keyword">null</span> <span class="token operator">!=</span> strBufferSize <span class="token operator">?</span> <span class="token class-name">Integer</span>
+        <span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>strBufferSize<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token number">8192</span> <span class="token operator">*</span> <span class="token number">4</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> <span class="token class-name">BufferedReader</span> logFileReader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span>
+        <span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">,</span> inputBufferSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> <span class="token keyword">record</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">record</span> <span class="token operator">=</span> logFileReader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 实例变量recordProcessor是在AbstractStatTask中定义的</span>
+        recordProcessor<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span><span class="token keyword">record</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      <span class="token class-name">Tools</span><span class="token punctuation">.</span><span class="token function">silentClose</span><span class="token punctuation">(</span>logFileReader<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>RecordProcessor源码</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RecordProcessor</span> <span class="token keyword">implements</span> <span class="token class-name">StatProcessor</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">DelayItem</span><span class="token punctuation">&gt;</span></span> summaryResult<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">FastTimeStampParser</span> FAST_TIMESTAMP_PARSER <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FastTimeStampParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">DecimalFormat</span> df <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DecimalFormat</span><span class="token punctuation">(</span><span class="token string">&quot;0000&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> INDEX_TIMESTAMP <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> INDEX_TRACE_ID <span class="token operator">=</span> <span class="token number">7</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> INDEX_MESSAGE_TYPE <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> INDEX_OPERATION_NAME <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SRC_DEVICE <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> DEST_DEVICE <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> FIELDS_COUNT <span class="token operator">=</span> <span class="token number">11</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">DelayData</span><span class="token punctuation">&gt;</span></span> immediateResult<span class="token punctuation">;</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> traceIdDiff<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> expectedOperationName<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token class-name">String</span> selfDevice <span class="token operator">=</span> <span class="token string">&quot;ESB&quot;</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">long</span> currRecordDate<span class="token punctuation">;</span>
+
+  <span class="token comment">// 采样周期，单位：s</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> sampleInterval<span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> expectedExternalDeviceList<span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">RecordProcessor</span><span class="token punctuation">(</span><span class="token keyword">int</span> sampleInterval<span class="token punctuation">,</span> <span class="token keyword">int</span> traceIdDiff<span class="token punctuation">,</span>
+      <span class="token class-name">String</span> expectedOperationName<span class="token punctuation">,</span> <span class="token class-name">String</span> expectedExternalDeviceList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    summaryResult <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TreeMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">DelayItem</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">this</span><span class="token punctuation">.</span>immediateResult <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">DelayData</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>sampleInterval <span class="token operator">=</span> sampleInterval<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>traceIdDiff <span class="token operator">=</span> traceIdDiff<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>expectedOperationName <span class="token operator">=</span> expectedOperationName<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>expectedExternalDeviceList <span class="token operator">=</span> expectedExternalDeviceList<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> recordParts<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span> traceId<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> matchingReqTraceId<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> recordType<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> interfaceName<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> operationName<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> timeStamp<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> strRspTimeStamp<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> strReqTimeStamp<span class="token punctuation">;</span>
+    <span class="token class-name">DelayData</span> delayData<span class="token punctuation">;</span>
+
+    traceId <span class="token operator">=</span> recordParts<span class="token punctuation">[</span>INDEX_TRACE_ID<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    recordType <span class="token operator">=</span> recordParts<span class="token punctuation">[</span>INDEX_MESSAGE_TYPE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    timeStamp <span class="token operator">=</span> recordParts<span class="token punctuation">[</span>INDEX_TIMESTAMP<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">&quot;response&quot;</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>recordType<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">int</span> nonSeqLen <span class="token operator">=</span> traceId<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">4</span><span class="token punctuation">;</span>
+      <span class="token class-name">String</span> traceIdSeq <span class="token operator">=</span> traceId<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span>nonSeqLen<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token comment">// 获取这条响应记录相应的请求记录中的traceId</span>
+      matchingReqTraceId <span class="token operator">=</span> traceId<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> nonSeqLen<span class="token punctuation">)</span>
+          <span class="token operator">+</span> df<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>traceIdSeq<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">intValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+              <span class="token operator">-</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>traceIdDiff<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">intValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      delayData <span class="token operator">=</span> immediateResult<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>matchingReqTraceId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> delayData<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 不可能到这里，除非日志记录有错误</span>
+        <span class="token keyword">return</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      delayData<span class="token punctuation">.</span><span class="token function">setRspTime</span><span class="token punctuation">(</span>timeStamp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      strRspTimeStamp <span class="token operator">=</span> timeStamp<span class="token punctuation">;</span>
+      strReqTimeStamp <span class="token operator">=</span> delayData<span class="token punctuation">.</span><span class="token function">getReqTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token comment">// 仅在读取到表示相应的请求记录时才统计数据</span>
+      <span class="token keyword">long</span> reqTimeStamp <span class="token operator">=</span> <span class="token function">parseTimeStamp</span><span class="token punctuation">(</span>strReqTimeStamp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">long</span> rspTimeStamp <span class="token operator">=</span> <span class="token function">parseTimeStamp</span><span class="token punctuation">(</span>strRspTimeStamp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">long</span> delay <span class="token operator">=</span> rspTimeStamp <span class="token operator">-</span> reqTimeStamp<span class="token punctuation">;</span>
+      <span class="token class-name">DelayItem</span> delayStatData<span class="token punctuation">;</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>reqTimeStamp <span class="token operator">-</span> currRecordDate <span class="token operator">&lt;</span> sampleInterval <span class="token operator">*</span> <span class="token number">1000</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        delayStatData <span class="token operator">=</span> summaryResult<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>currRecordDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        currRecordDate <span class="token operator">=</span> reqTimeStamp<span class="token punctuation">;</span>
+        delayStatData <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DelayItem</span><span class="token punctuation">(</span>currRecordDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        delayStatData<span class="token punctuation">.</span><span class="token function">getTotalDelay</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addAndGet</span><span class="token punctuation">(</span>delay<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        summaryResult<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>currRecordDate<span class="token punctuation">,</span> delayStatData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      delayStatData<span class="token punctuation">.</span><span class="token function">getSampleCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">incrementAndGet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      delayStatData<span class="token punctuation">.</span><span class="token function">getTotalDelay</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addAndGet</span><span class="token punctuation">(</span>delay<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 记录请求数据</span>
+      delayData <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DelayData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      delayData<span class="token punctuation">.</span><span class="token function">setTraceId</span><span class="token punctuation">(</span>traceId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      delayData<span class="token punctuation">.</span><span class="token function">setReqTime</span><span class="token punctuation">(</span>timeStamp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      interfaceName <span class="token operator">=</span> recordParts<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+      operationName <span class="token operator">=</span> recordParts<span class="token punctuation">[</span>INDEX_OPERATION_NAME<span class="token punctuation">]</span><span class="token punctuation">;</span>
+      delayData<span class="token punctuation">.</span><span class="token function">setOperationName</span><span class="token punctuation">(</span>interfaceName <span class="token operator">+</span> <span class="token string">'.'</span> <span class="token operator">+</span> operationName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      immediateResult<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>traceId<span class="token punctuation">,</span> delayData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token keyword">record</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> recordParts <span class="token operator">=</span> <span class="token function">filterRecord</span><span class="token punctuation">(</span><span class="token keyword">record</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> recordParts <span class="token operator">||</span> recordParts<span class="token punctuation">.</span>length <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">process</span><span class="token punctuation">(</span>recordParts<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">filterRecord</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token keyword">record</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> recordParts <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span>FIELDS_COUNT<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token class-name">Tools</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token keyword">record</span><span class="token punctuation">,</span> recordParts<span class="token punctuation">,</span> <span class="token string">'|'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>recordParts<span class="token punctuation">.</span>length <span class="token operator">&lt;</span> <span class="token number">7</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token class-name">String</span> recordType <span class="token operator">=</span> recordParts<span class="token punctuation">[</span>INDEX_MESSAGE_TYPE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> operationName <span class="token operator">=</span> recordParts<span class="token punctuation">[</span>INDEX_OPERATION_NAME<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> srcDevice <span class="token operator">=</span> recordParts<span class="token punctuation">[</span>SRC_DEVICE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> destDevice <span class="token operator">=</span> recordParts<span class="token punctuation">[</span>DEST_DEVICE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">&quot;response&quot;</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>recordType<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      operationName <span class="token operator">=</span> operationName<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>
+          operationName<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token string">&quot;Rsp&quot;</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      recordParts<span class="token punctuation">[</span>INDEX_OPERATION_NAME<span class="token punctuation">]</span> <span class="token operator">=</span> operationName<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>expectedOperationName<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>operationName<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      recordParts <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">&quot;*&quot;</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>expectedExternalDeviceList<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">&quot;request&quot;</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>recordType<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>selfDevice<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>srcDevice<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          recordParts <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>selfDevice<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>destDevice<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          recordParts <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">&quot;request&quot;</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>recordType<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 仅考虑表示当前设备发送给指定列表中的其他设备的请求记录</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>selfDevice<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>srcDevice<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> expectedExternalDeviceList
+            <span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>destDevice<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          recordParts <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 仅考虑表示指定列表中的其他设备发生给读取设备的响应记录</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>selfDevice<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>destDevice<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> expectedExternalDeviceList
+            <span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>srcDevice<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          recordParts <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> recordParts<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">DelayItem</span><span class="token punctuation">&gt;</span></span> <span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> summaryResult<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">long</span> <span class="token function">parseTimeStamp</span><span class="token punctuation">(</span><span class="token class-name">String</span> timeStamp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> parts <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token class-name">Tools</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span>timeStamp<span class="token punctuation">,</span> parts<span class="token punctuation">,</span> <span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">long</span> part1 <span class="token operator">=</span> FAST_TIMESTAMP_PARSER<span class="token punctuation">.</span><span class="token function">parseTimeStamp</span><span class="token punctuation">(</span>parts<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> millisecond <span class="token operator">=</span> parts<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> part2 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">!=</span> millisecond<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      part2 <span class="token operator">=</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>millisecond<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> part1 <span class="token operator">+</span> part2<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">class</span> <span class="token class-name">DelayData</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> traceId<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> operationName<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> reqTime<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> rspTime<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">DelayData</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getTraceId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> traceId<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setTraceId</span><span class="token punctuation">(</span><span class="token class-name">String</span> traceId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>traceId <span class="token operator">=</span> traceId<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getOperationName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> operationName<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setOperationName</span><span class="token punctuation">(</span><span class="token class-name">String</span> operationName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>operationName <span class="token operator">=</span> operationName<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getReqTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> reqTime<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setReqTime</span><span class="token punctuation">(</span><span class="token class-name">String</span> reqTime<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>reqTime <span class="token operator">=</span> reqTime<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getRspTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> rspTime<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setRspTime</span><span class="token punctuation">(</span><span class="token class-name">String</span> rspTime<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>rspTime <span class="token operator">=</span> rspTime<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token string">&quot;DelayData [traceId=&quot;</span> <span class="token operator">+</span> traceId <span class="token operator">+</span> <span class="token string">&quot;, operationName=&quot;</span>
+          <span class="token operator">+</span> operationName <span class="token operator">+</span> <span class="token string">&quot;, reqTime=&quot;</span> <span class="token operator">+</span> reqTime <span class="token operator">+</span> <span class="token string">&quot;, rspTime=&quot;</span> <span class="token operator">+</span> rspTime
+          <span class="token operator">+</span> <span class="token string">&quot;]&quot;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>StatProcessor源码</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">StatProcessor</span> <span class="token punctuation">{</span>
+  <span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token keyword">record</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">DelayItem</span><span class="token punctuation">&gt;</span></span> <span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>SimpleStatTask的doCalculate方法每读取一条日志记录便调用recordProcessor的process方法进行统计处理。显然，doCalculate方法所执行的任务是一个混合型任务。这个任务的执行线程在等待磁盘返回数据期间什么也做不了，从而导致处理器时间的浪费。为了提高并发性以提高统计效率，考虑将这个任务分解为CPU密集型和I/O密集型两种子任务，并采用专门的工作者线程分别负责这两种子任务的执行——MultithreadedStatTask。</p> <p>MultithreadedStatTask源码</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MultithreadedStatTask</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractStatTask</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 日志文件输入缓冲大小</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token keyword">int</span> inputBufferSize<span class="token punctuation">;</span>
+  <span class="token comment">// 日志记录集大小</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token keyword">int</span> batchSize<span class="token punctuation">;</span>
+  <span class="token comment">// 日志文件输入流</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">InputStream</span> in<span class="token punctuation">;</span>
+
+  <span class="token comment">/* 实例初始化块 */</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name">String</span> strBufferSize <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">&quot;x.input.buffer&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    inputBufferSize <span class="token operator">=</span> <span class="token keyword">null</span> <span class="token operator">!=</span> strBufferSize <span class="token operator">?</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>strBufferSize<span class="token punctuation">)</span>
+        <span class="token operator">:</span> <span class="token number">8192</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> strBatchSize <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">&quot;x.batch.size&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    batchSize <span class="token operator">=</span> <span class="token keyword">null</span> <span class="token operator">!=</span> strBatchSize <span class="token operator">?</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>strBatchSize<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token number">2000</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">MultithreadedStatTask</span><span class="token punctuation">(</span><span class="token keyword">int</span> sampleInterval<span class="token punctuation">,</span>
+      <span class="token class-name">StatProcessor</span> recordProcessor<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span>sampleInterval<span class="token punctuation">,</span> recordProcessor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>in <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">MultithreadedStatTask</span><span class="token punctuation">(</span><span class="token class-name">InputStream</span> in<span class="token punctuation">,</span> <span class="token keyword">int</span> sampleInterval<span class="token punctuation">,</span>
+      <span class="token keyword">int</span> traceIdDiff<span class="token punctuation">,</span>
+      <span class="token class-name">String</span> expectedOperationName<span class="token punctuation">,</span> <span class="token class-name">String</span> expectedExternalDeviceList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span>sampleInterval<span class="token punctuation">,</span> traceIdDiff<span class="token punctuation">,</span> expectedOperationName<span class="token punctuation">,</span>
+        expectedExternalDeviceList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>in <span class="token operator">=</span> in<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doCalculate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">final</span> <span class="token class-name">AbstractLogReader</span> logReaderThread <span class="token operator">=</span> <span class="token function">createLogReader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 启动工作者线程</span>
+    logReaderThread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">RecordSet</span> recordSet<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> <span class="token keyword">record</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      recordSet <span class="token operator">=</span> logReaderThread<span class="token punctuation">.</span><span class="token function">nextBatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> recordSet<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">!=</span> <span class="token punctuation">(</span><span class="token keyword">record</span> <span class="token operator">=</span> recordSet<span class="token punctuation">.</span><span class="token function">nextRecord</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 实例变量recordProcessor是在AbstractStatTask中定义的</span>
+        recordProcessor<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span><span class="token keyword">record</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token comment">// for循环结束</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">protected</span> <span class="token class-name">AbstractLogReader</span> <span class="token function">createLogReader</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">AbstractLogReader</span> logReader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LogReaderThread</span><span class="token punctuation">(</span>in<span class="token punctuation">,</span> inputBufferSize<span class="token punctuation">,</span>
+        batchSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> logReader<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>MultithreadedStatTask.doCalculate()创建并启动了工作者线程logReaderThread（LogReaderThread实例），该线程专门负责日志文件的读取并将其读取到的一批日志记录填充到指定的日志记录集（RecordSet类的实例）中。我们称AbstractLogReader子类的实例（logReaderThread）为日志文件读取线程。MultithreadedStatTask.doCalculate()需要读取一批日志记录的时候便调用logReaderThread.nextBatch()来获取一个已填充完毕的日志记录集，然后遍历该日志记录集并调用RecordProcessor的process方法对遍历到的日志记录进行统计处理。因此称MultithreadedStatTask.doCalculate()的执行线程为统计处理线程。由于MultithreadedStatTask.doCalculate()是由其父类（AbstractStatTask）的run方法调用的，而AbstractStatTask.run()是由main线程执行的，因此main线程就是统计处理线程。这里，我们使用唯一的一个线程（统计处理线程）负责对日志记录进行统计逻辑处理，同时又采用另外一个工作者线程（日志文件读取线程）负责对日志文件进行读取。因此我们自然地绕过了上述问题2和问题1。另外，由于统计处理线程和日志文件读取线程是并发执行的，因此我们也绕过了上述问题3。</p> <p>LogReaderThread源码</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * 日志读取线程实现类
+ *
+ * @author Viscent Huang
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LogReaderThread</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractLogReader</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 线程安全的队列</span>
+  <span class="token keyword">final</span> <span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">RecordSet</span><span class="token punctuation">&gt;</span></span> channel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">RecordSet</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">LogReaderThread</span><span class="token punctuation">(</span><span class="token class-name">InputStream</span> in<span class="token punctuation">,</span> <span class="token keyword">int</span> inputBufferSize<span class="token punctuation">,</span> <span class="token keyword">int</span> batchSize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span>in<span class="token punctuation">,</span> inputBufferSize<span class="token punctuation">,</span> batchSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token class-name">RecordSet</span> <span class="token function">nextBatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
+    <span class="token class-name">RecordSet</span> batch<span class="token punctuation">;</span>
+    <span class="token comment">// 从队列中取出一个记录集</span>
+    batch <span class="token operator">=</span> channel<span class="token punctuation">.</span><span class="token function">take</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>batch<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      batch <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> batch<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">publish</span><span class="token punctuation">(</span><span class="token class-name">RecordSet</span> recordBatch<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 记录集存入队列</span>
+    channel<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>recordBatch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>AbstractLogReader源码</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * 日志文件读取线程。
+ *
+ * @author Viscent Huang
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">AbstractLogReader</span> <span class="token keyword">extends</span> <span class="token class-name">Thread</span> <span class="token punctuation">{</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">BufferedReader</span> logFileReader<span class="token punctuation">;</span>
+  <span class="token comment">// 表示日志文件是否读取结束</span>
+  <span class="token keyword">protected</span> <span class="token keyword">volatile</span> <span class="token keyword">boolean</span> isEOF <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token keyword">int</span> batchSize<span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">AbstractLogReader</span><span class="token punctuation">(</span><span class="token class-name">InputStream</span> in<span class="token punctuation">,</span> <span class="token keyword">int</span> inputBufferSize<span class="token punctuation">,</span> <span class="token keyword">int</span> batchSize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    logFileReader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        inputBufferSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>batchSize <span class="token operator">=</span> batchSize<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">protected</span> <span class="token class-name">RecordSet</span> <span class="token function">getNextToFill</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">RecordSet</span><span class="token punctuation">(</span>batchSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">/* 留给子类实现的抽象方法 */</span>
+  <span class="token comment">// 获取下一个记录集</span>
+  <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token class-name">RecordSet</span> <span class="token function">nextBatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 发布指定的记录集</span>
+  <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">publish</span><span class="token punctuation">(</span><span class="token class-name">RecordSet</span> recordBatch<span class="token punctuation">)</span>
+      <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">RecordSet</span> recordSet<span class="token punctuation">;</span>
+    <span class="token keyword">boolean</span> eof <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        recordSet <span class="token operator">=</span> <span class="token function">getNextToFill</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        recordSet<span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        eof <span class="token operator">=</span> <span class="token function">doFill</span><span class="token punctuation">(</span>recordSet<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">publish</span><span class="token punctuation">(</span>recordSet<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>eof<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>recordSet<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">publish</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">RecordSet</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+          isEOF <span class="token operator">=</span> eof<span class="token punctuation">;</span>
+          <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      <span class="token class-name">Tools</span><span class="token punctuation">.</span><span class="token function">silentClose</span><span class="token punctuation">(</span>logFileReader<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">protected</span> <span class="token keyword">boolean</span> <span class="token function">doFill</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">RecordSet</span> recordSet<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">final</span> <span class="token keyword">int</span> capacity <span class="token operator">=</span> recordSet<span class="token punctuation">.</span>capacity<span class="token punctuation">;</span>
+    <span class="token class-name">String</span> <span class="token keyword">record</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> capacity<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">record</span> <span class="token operator">=</span> logFileReader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> <span class="token keyword">record</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token comment">// 将读取到的日志记录存入指定的记录集</span>
+      recordSet<span class="token punctuation">.</span><span class="token function">putRecord</span><span class="token punctuation">(</span><span class="token keyword">record</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>RecordSet源码</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * 日志记录集。 包含若干条日志记录。
+ *
+ * @author Viscent Huang
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RecordSet</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">int</span> capacity<span class="token punctuation">;</span>
+  <span class="token keyword">final</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> records<span class="token punctuation">;</span>
+  <span class="token keyword">int</span> readIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> writeIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">RecordSet</span><span class="token punctuation">(</span><span class="token keyword">int</span> capacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>capacity <span class="token operator">=</span> capacity<span class="token punctuation">;</span>
+    records <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span>capacity<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">nextRecord</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span> <span class="token keyword">record</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>readIndex <span class="token operator">&lt;</span> writeIndex<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">record</span> <span class="token operator">=</span> records<span class="token punctuation">[</span>readIndex<span class="token operator">++</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token keyword">record</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">putRecord</span><span class="token punctuation">(</span><span class="token class-name">String</span> line<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>writeIndex <span class="token operator">==</span> capacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    records<span class="token punctuation">[</span>writeIndex<span class="token operator">++</span><span class="token punctuation">]</span> <span class="token operator">=</span> line<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    readIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    writeIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> len <span class="token operator">=</span> records<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> len<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      records<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token number">0</span> <span class="token operator">==</span> writeIndex<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>综上所述，本案例实际上是将程序算法中的读取日志文件和对日志记录进行统计处理这两个步骤由原来的单线程程序的串行处理改为并发处理，即实现了并发化。</p> <h4 id="案例思考-2"><a href="#案例思考-2" class="header-anchor">#</a> <strong>案例思考</strong></h4> <p>基于任务的分割这种并发化策略是从程序的处理逻辑角度入手，将原始任务处理逻辑分解为若干子任务，并创建专门的工作者线程来执行这些子任务。基于任务的分割结果是产生多个相互协作的异质工作者线程，即任务处理逻辑各异的线程。此种情况下注意以下几点：</p> <ul><li><strong>基于任务的分割同样可能导致程序的复杂性增加</strong>。日志统计处理线程与日志读取线程之间的协作本身就增加了程序的复杂性。上述案例中借助一个线程安全队列<code>java.util.concurrent.ArrayBlockingQueue</code>来实现日志统计处理线程与日志读取线程之间的数据交互。待统计的日志记录可能多达上千万条，如果日志统计处理线程是逐条地从日志读取线程读取日志记录，那么这两个线程之间的数据传递的开销将不容小觑。所以，我们使用<code>RecordSet</code>类作为日志统计处理线程和日志文件读取线程之间数据传递的容器。该容器使得一批日志记录（例如2000条）成为日志统计处理线程和日志文件读取线程之间的数据传递单位，从而减少了数据传递的开销，而这同时也在一定程度上增加了程序的复杂性。</li> <li><strong>多线程程序可能增加额外的处理器时间消耗</strong>。由于多线程版的统计程序比相应的单线程版程序增加了工作者线程的创建与启动、日志记录集的填充、日志文件读取线程和日志记录统计处理线程之间的数据传递以及额外的上下文切换等开销，多线程版的统计程序运行时的处理器时间消耗要比相应的单线程程序多了不少。</li> <li><strong>多线程程序未必比相应的单线程程序快</strong>。从上述案例可知，多线程版的统计程序的确是比相应的单线程版程序要快一些，但实际上也可能不是快很多。因为影响程序性能的因素是多方面的，例如，上述案例中程序所使用的两个重要参数是日志文件读取线程所使用的文件输入缓冲区大小（通过自定义的虚拟机系统属性“x.input.buffer”指定）和日志记录缓冲区的容量（通过自定义的虚拟机系统属性“x.batch.size”指定）。这两个参数值对多线程版的统计程序的性能有着关键性的影响——这两个参数设置得不合理（比如日志记录缓冲区的容量过小）可能使得多线程版的统计程序比单线程版的还慢。另外，还有一些一般性因素也会影响Java程序的性能，包括垃圾回收（它可能导致上下文切换）、JIT动态编译（动态编译也有自身的开销）等。</li> <li><strong>考虑从单线程程序向多线程程序“进化”</strong>。考虑到多线程程序的相对复杂性以及多线程程序未必比单线程程序要快，使用多线程编程的一个好的方式是从单线程程序开始，只有在单线程程序算法本身没有重大性能瓶颈但仍然无法满足要求的情况下我们才考虑使用多线程。当然，这个过程需要注意重复建设的问题。这一点可以通过在代码中采用一定程度的抽象来避免或者减少这方面的成本。例如，在上述案例中，我们用AbstractStatTask这个抽象类对统计程序的算法步骤进行了抽象，这使得从单线程程序向多线程程序“进化”时无须修改现有代码，而只需要新建一个AbstractStatTask的子类，在该子类中实现多线程编程。这种方式不仅减少了编码量，还避免了对现有代码进行重复调试、测试！</li></ul> <blockquote><p>使用多线程编程的一个好的方式是从单线程程序开始，只有在单线程程序算法本身没有重大性能瓶颈但仍然无法满足要求的情况下我们才考虑使用多线程。</p></blockquote> <h3 id="按处理步骤分割"><a href="#按处理步骤分割" class="header-anchor">#</a> 按处理步骤分割</h3> <p>如果程序对其输入集{d1,d2,…,dN}中的任何一个输入元素di(1≤i≤N)的处理都包含若干步骤{Step1,Step2,…,StepM}，那么为了提高程序的吞吐率，我们可以考虑为其中的每一个处理步骤都安排一个（或者多个）工作者线程负责相应的处理。这就是按处理步骤分割的基本思想。</p> <p>按任务的资源消耗属性分割可以被看作按处理步骤分割的一个特例。多线程设计模式中的Pipeline模式的核心思想也正是按处理步骤分割的。</p> <p>在按处理步骤分割实现的多线程程序中，多个工作者线程并发地对程序输入集中的不同输入元素进行处理，这提高了程序的吞吐率。而工作者线程之间传递数据同样也需要借助线程安全的队列，但这也会增加相应的开销。因此，按处理步骤分割可能导致单个输入元素的处理时间相对变大，即延迟增加。</p> <p>同样，在按处理步骤分割中我们也需要注意工作者线程数的合理设置：工作者线程数量过多可能会导致过多的上下文切换，这反而降低了程序的吞吐率。因此，保守的设置方法是从仅为每个处理步骤设置一个工作者线程开始，在确实有证据显示有必要增加某个处理步骤的工作者线程数的情况下才增加线程数。</p> <h2 id="合理设置线程数"><a href="#合理设置线程数" class="header-anchor">#</a> 合理设置线程数</h2> <h3 id="amdahl-s定律"><a href="#amdahl-s定律" class="header-anchor">#</a> Amdahl's定律</h3> <p>Amdahl's定律（Amdahl'sLaw）描述了线程数与多线程程序相对于单线程程序的提速之间的关系。在一个处理器上一个时刻只能够运行一个线程的情况下，处理器的数量就等同于并行线程的数量。设处理器的数量为N，程序中必须串行（即无法并发化）的部分耗时占程序全部耗时的比率为P，那么将这样一个程序改为多线程程序，我们能够获得的理论上的最大提速Smax与N、P之间的关系就是Amdahl's定律内容</p> <p><img src="https://i.loli.net/2021/09/23/hR2gFiY4E3Q9pkW.png" alt="image-20210923164458639"></p> <p>一个程序的算法中有些部分是可以并行化的，而有些部分则只能够是串行的。设P为这个程序的串行部分的耗时比率，T(1)为该程序的单线程版运行总耗时，T(N)为该程序的多线程版运行总耗时，那么将该程序由单线程改为多线程所得到的提速Smax可以表示为：</p> <p><img src="https://i.loli.net/2021/09/23/B7p8mfRInTGDbgx.png" alt="image-20210923164629308"></p> <p>为方便起见，设T(1)为1，则该程序中的串行部分耗时为P，可并行部分耗时为1-P。将这个程序改为多线程程序的时候，该程序的可并行部分耗时会被N个并行线程平均分摊，因此该程序的多线程版的并行部分总耗时为(1-P)/N。由此，我们可以得出T(N)=P+(1-P)/N。将T(N)及T(1)=1代入式（4-2）即可得到Amdahl's定律的公式表示。</p> <p>从上述推导过程可以看出，多线程程序的提速主要来自多个线程对程序中可并行化部分的耗时均摊。由Amdahl's定律的公式可知：</p> <p><img src="https://i.loli.net/2021/09/23/fVd25QBUAb3WNvG.png" alt="image-20210923164907508"></p> <p>即当N趋向于无穷大的时候，Smax趋向于1/P。由此可见，最终决定多线程程序提速的因素是整个计算中串行部分的耗时比率P，而不是线程数N。P的值越大，即程序中不可并行化的部分所占比率越大，那么提速越小。因此，为使多线程程序能够获得较大的提速，我们应该从算法入手，减少程序中必须串行的部分，而不是仅寄希望于增加线程数！</p> <h3 id="线程数设置的原则"><a href="#线程数设置的原则" class="header-anchor">#</a> 线程数设置的原则</h3> <p>线程数设置得过少可能导致无法充分利用处理器资源；而线程数设置得过大则又可能导致过多的上下文切换，从而反倒降低了系统的性能。然而，设置一个“既不过小，也不过大”的绝对理想的线程数实际上是不可能的。因为设置一个绝对理想的线程数所需的信息对我们来说总是不充分的，这些因素包括系统的资源状况（处理器数目、内存容量等）、线程所执行的任务的特性（CPU密集型任务、I/O密集型任务）、资源使用情况规划（CPU使用率上限）以及程序运行过程中使用到的其他稀缺资源情况（如数据库连接、文件句柄数）等。</p> <p>由于线程运行的硬件基础是处理器，因此设置线程数首先并且必须要考虑的一个因素就是系统的处理器数目。但由于一个系统的处理器资源可能是由上百个进程共享的，因此，要为一个应用程序设置合理的线程数，从理论上说我们需要考虑其他所有进程内部的线程数设置情况。显然，这是不可能实现的，因为我们无法事先知道一个环境（尤其是生产环境）的进程数量。退一步来讲，即便是在一个应用程序（进程），例如一个JavaWeb应用程序中，从一个模块出发来考虑该模块线程数的合理值，要将该程序的其他模块的线程数设置情况考虑进来也不是一件容易的事情。</p> <p>因此，设置一个合理的线程数实际上就是避免随意设置线程，我们无法达到一个纯粹的理想值。</p> <p>线程数的合理值可以根据以下规则设置。</p> <ul><li>对于CPU密集型线程，这类线程执行任务时消耗的主要是处理器资源，将这类线程的线程数设置为Ncpu个。因为CPU密集型线程也可能由于某些原因（比如缺页中断/PageFault）而被切出，此时为了避免处理器资源浪费，我们也可以为这类线程设置一个额外的线程，即将线程数设置为Ncpu+1。</li> <li>对于I/O密集型线程，考虑到I/O操作可能导致上下文切换，为这样的线程设置过多的线程数会导致过多的额外系统开销。因此如果一个工作者线程就足以满足我们的要求，那么就不要设置更多的线程数。如果一个工作者线程仍然不够用，那么我们可以考虑将这类线程的数量设置为2×Ncpu。这是因为I/O密集型线程在等待I/O操作返回结果时是不占用处理器资源的，因此我们可以为每个处理器安排一个额外的线程以提高处理器资源的利用率。</li></ul> <blockquote><p>对于CPU密集型线程，线程数通常可以设置为Ncpu+1；对于I/O密集型线程，优先考虑将线程数设置为1，仅在一个线程不够用的情况下将线程数向2×Ncpu靠近。</p></blockquote> <p>如果要进一步“精确”地设置线程数，我们可能需要考虑目标处理器使用率。如果任务本身是混合型而又不太好将其拆分成CPU密集型和I/O密集型的子任务的话，也可以考虑不拆分。此时，我们可以参考公式来设置线程数：</p> <p><img src="https://i.loli.net/2021/09/23/ao4kKZDHXvfhrsd.png" alt="image-20210923165956234"></p> <p>其中，Nthreads为线程数的合理大小，Ncpu为CPU数目，Ucpu为目标CPU使用率（0&lt;Ucpu≤1），WT（WaitTime）为程序花费在等待（例如等待I/O操作结果）上的时长，ST（ServiceTime）为程序实际占用处理器执行计算的时长。</p></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev"><a href="/blog/多线程03——同步机制.html" class="prev"><i aria-label="icon: left" class="anticon anticon-left"><svg viewBox="64 64 896 896" focusable="false" data-icon="left" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 0 0 0 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"></path></svg></i>
+        同步机制
+      </a></span> <span class="next"><a href="/blog/多线程05——线程间协作.html">
+        线程间协作
+        <i aria-label="icon: right" class="anticon anticon-right"><svg viewBox="64 64 896 896" focusable="false" data-icon="right" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"></path></svg></i></a></span></p></div> </main> <!----></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.5ad89f1f.js" defer></script><script src="/assets/js/2.32caeb4e.js" defer></script><script src="/assets/js/10.5f2f1c75.js" defer></script>
+  </body>
+</html>
